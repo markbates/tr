@@ -1,0 +1,3 @@
+package: github.com/markbates/tr
+import:
+- package: github.com/mattn/go-zglob

@@ -1,0 +1,6 @@
+hash: 626baa762ccd1fbbca07d25cda046ed97dedc08e0128938809a0c2c372ce11ec
+updated: 2016-06-03T17:00:05.029962863-04:00
+imports:
+- name: github.com/mattn/go-zglob
+  version: 249e8bceca8cd265110a08bbb63303fb9db47445
+devImports: []
