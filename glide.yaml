@@ -1,3 +1,6 @@
 package: github.com/markbates/tr
 import:
 - package: github.com/mattn/go-zglob
+- package: github.com/markbates/going
+  subpackages:
+  - clam
