@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"os"
@@ -9,7 +9,7 @@ import (
 
 func Test_Exists(t *testing.T) {
 	r := require.New(t)
-	r.True(Exists("main.go"))
+	r.True(Exists("root.go"))
 	r.False(Exists("idontexist.go"))
 }
 
