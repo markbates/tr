@@ -7,10 +7,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var Verbose bool
+
+func init() {
+	RootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+}
+
 var RootCmd = &cobra.Command{
-	Use: "tr",
-	Run: func(cmd *cobra.Command, args []string) {
+	Use:                "tr",
+	DisableFlagParsing: true,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("Test Runner: v%s\n", Version)
+	},
+	Run: func(cmd *cobra.Command, args []string) {
 		for path, runner := range runners {
 			if Exists(path) {
 				Run(runner(args))

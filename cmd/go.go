@@ -15,7 +15,8 @@ func init() {
 }
 
 var goCmd = &cobra.Command{
-	Use: "go",
+	Use:                "go",
+	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		Run(RunGoTests(args))
 	},
