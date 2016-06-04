@@ -30,8 +30,86 @@ Right now T.T. only supports a handful of test runners, but with your help we'll
 
 ### Rake
 
+__Key file:__ *Rakefile*
+
 If you're project contains a `Rakefile`, than T.T. will assume you want to run that suite using `rake`. Oh, but wait, there's a `Gemfile` too? Oh man, T.T. knows just what to do with that! He'll run rake for you using `bundle exec rake`, he's just that nice of a bear!
 
 ```
-$ tt rake
+$ tt <any flags/args the rake command takes>
+// or
+$ tt rake <any flags/args the rake command takes>
+```
+
+### Go
+
+__Key file:__ **_.test.go*
+
+If you're project contains any `_test.go` files, than T.T. will run `go test` for you. Oh, and yes, he is very aware of that pesky `vendor` folder and knows enough to stay well and truly away from it!
+
+```
+$ tt <any flags/args the go test command takes>
+// or
+$ tt go <any flags/args the go test command takes>
+```
+
+#### The `-run` flag
+
+Yes, T.T. knows about the `-run` flag. If you tell him to run a particular test of tests, he will!
+
+```
+$ tt go -run Hello ./models
+```
+
+### Make
+
+__Key file:__ *Makefile*
+
+Are you a masochist? Do you love your old `make` files? Well, you want to know a secret? T.T. loves them too. They remind him of a simplier time.
+
+```
+$ tt <any flags/args your Makefile takes>
+//
+$ tt make
+```
+
+If you do want to use a `Makefile`, than T.T. asked me to let you know that you have a `test` target in the `Makefile`, otherwise, he'll just be down right confused and won't know what to do!
+
+### Custom (`./test.sh`)
+
+__Key file:__ *./test.sh*
+
+It is hard for poor old T.T. to keep up with all of the latest and greatest new testing tools, programming languages, and reality TV stars out there. So, if T.T. doesn't know how to handle you're favorite way of running tests, don't worry! Just drop a `./test.sh` file in your app and you are good to go!
+
+```
+$ tt <any flags/args your ./test.sh file takes>
+//
+$ tt sh <any flags/args your ./test.sh file takes>
+```
+
+## History
+
+T.T. has an incredible memory! He can remember all of the different test runs you've done! Seriously, it's a pretty cool party trick.
+
+### Listing History
+
+```
+$ tt history
+```
+
+### Replay History
+
+```
+$ tt history <n>
+```
+
+### Replay Last Run
+
+```
+$ tt history last
+```
+
+### Clear History
+
+```
+$ tt history clear
 ```
