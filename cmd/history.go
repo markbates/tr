@@ -122,7 +122,7 @@ func listHistories() {
 			if err != nil {
 				return err
 			}
-			fmt.Printf("%s)\t%s | %s\n\t%s\n", k, h.Time.In(time.Local), h.Verdict(), h.String())
+			fmt.Printf("%s)\t%s\t| %s\n\t%s\n", k, h.Time.In(time.Local), h.Verdict(), h.String())
 			return nil
 		})
 		return nil
