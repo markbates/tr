@@ -5,3 +5,4 @@ import:
   - clam
 - package: github.com/mattn/go-zglob
 - package: github.com/spf13/cobra
+- package: github.com/mitchellh/go-homedir
