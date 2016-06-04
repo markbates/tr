@@ -1,6 +1,8 @@
-hash: ed1ddc2f99ea892b46c4c951d861a08fe5b11a3587edba7cfed258b9d95c35fc
-updated: 2016-06-03T23:02:45.051772256-04:00
+hash: 1d8a39f0a2e9ce613a972028540a2832e3839ff48c11a5c2a073e5399f0e9aa9
+updated: 2016-06-03T23:03:31.221063531-04:00
 imports:
+- name: github.com/boltdb/bolt
+  version: dfb21201d9270c1082d5fb0f07f500311ff72f18
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/markbates/going
@@ -12,7 +14,7 @@ imports:
 - name: github.com/mitchellh/go-homedir
   version: 981ab348d865cf048eb7d17e78ac7192632d8415
 - name: github.com/spf13/cobra
-  version: 3aa031de5989ad5047763c551cfc7a3a4b954542
+  version: 7f2b5fdf2abcfcc7137deab2d55b4e4809f39454
 - name: github.com/spf13/pflag
   version: cb88ea77998c3f024757528e3305022ab50b43be
 devImports: []
