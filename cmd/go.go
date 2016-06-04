@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"regexp"
@@ -39,7 +38,6 @@ func RunGoTests(args []string) *Cmd {
 		}
 	}
 	if !runFlag {
-		fmt.Println("Testing via go test")
 		res, err := clam.Run(exec.Command("go", "list", "./..."))
 		if err != nil {
 			Exit(err)

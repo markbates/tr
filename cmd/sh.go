@@ -1,10 +1,6 @@
 package cmd
 
-import (
-	"fmt"
-
-	"github.com/spf13/cobra"
-)
+import "github.com/spf13/cobra"
 
 func init() {
 	RootCmd.AddCommand(shCmd)
@@ -18,6 +14,5 @@ var shCmd = &cobra.Command{
 }
 
 func RunTestSH(args []string) *Cmd {
-	fmt.Println("Testing via ./test.sh")
 	return New("./test.sh", args...)
 }

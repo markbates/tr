@@ -1,10 +1,6 @@
 package cmd
 
-import (
-	"fmt"
-
-	"github.com/spf13/cobra"
-)
+import "github.com/spf13/cobra"
 
 func init() {
 	RootCmd.AddCommand(makeCmd)
@@ -18,7 +14,6 @@ var makeCmd = &cobra.Command{
 }
 
 func RunMakefile(args []string) *Cmd {
-	fmt.Println("Testing via Makefile")
 	cmd := New("make", "test")
 	cmd.Args = append(cmd.Args, args...)
 	return cmd

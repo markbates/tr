@@ -35,6 +35,7 @@ func Exit(err error) {
 
 func Run(cmd *Cmd) {
 	fmt.Println(cmd.String())
+	fmt.Println("------------------------------------\n")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Start()
