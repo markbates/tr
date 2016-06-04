@@ -16,7 +16,7 @@ type Cmd struct {
 }
 
 func (c Cmd) String() string {
-	return strings.Join(c.Args, " ")
+	return strings.TrimSpace(strings.Join(c.Args, " "))
 }
 
 func New(name string, args ...string) *Cmd {

@@ -4,14 +4,20 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 
 	"github.com/markbates/going/clam"
 	"github.com/spf13/cobra"
 )
 
+const vendorPattern = "/vendor/"
+
+var vendorRegex *regexp.Regexp
+
 func init() {
 	RootCmd.AddCommand(goCmd)
+	vendorRegex = regexp.MustCompile(vendorPattern)
 }
 
 var goCmd = &cobra.Command{
@@ -33,19 +39,16 @@ func RunGoTests(args []string) *Cmd {
 		}
 	}
 	if !runFlag {
-		if Exists("glide.lock") {
-			fmt.Println("Testing via go test (glide)")
-			res, err := clam.Run(exec.Command("glide", "novendor"))
-			if err != nil {
-				Exit(err)
-			}
-			pkgs := strings.Split(res, "\n")
-			for _, p := range pkgs {
+		fmt.Println("Testing via go test")
+		res, err := clam.Run(exec.Command("go", "list", "./..."))
+		if err != nil {
+			Exit(err)
+		}
+		pkgs := strings.Split(res, "\n")
+		for _, p := range pkgs {
+			if !vendorRegex.Match([]byte(p)) {
 				cmd.Args = append(cmd.Args, p)
 			}
-		} else {
-			fmt.Println("Testing via go test")
-			cmd.Args = append(cmd.Args, "./...")
 		}
 	}
 	return cmd

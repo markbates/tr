@@ -41,28 +41,8 @@ func Test_RunBundler(t *testing.T) {
 func Test_RunGoTests(t *testing.T) {
 	r := require.New(t)
 	os.Setenv("GO_ENV", "")
-	oe := Exists
-	defer func() { Exists = oe }()
-	Exists = func(path string) bool {
-		return !(path == "glide.lock")
-	}
-
 	cmd := RunGoTests([]string{"-v", "-race"})
-	r.Equal("go test -v -race ./...", cmd.String())
-	r.Equal("test", os.Getenv("GO_ENV"))
-}
-
-func Test_RunGoTests_Glide(t *testing.T) {
-	r := require.New(t)
-	os.Setenv("GO_ENV", "")
-	oe := Exists
-	defer func() { Exists = oe }()
-	Exists = func(path string) bool {
-		return path == "glide.lock"
-	}
-
-	cmd := RunGoTests([]string{"-v", "-race"})
-	r.Equal("go test -v -race . ", cmd.String())
+	r.Equal("go test -v -race github.com/markbates/tt/cmd", cmd.String())
 	r.Equal("test", os.Getenv("GO_ENV"))
 }
 
