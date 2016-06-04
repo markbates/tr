@@ -12,10 +12,11 @@ import (
 )
 
 type History struct {
-	Time    time.Time
-	CmdArgs []string
-	Results []byte
-	Error   error
+	Time     time.Time
+	CmdArgs  []string
+	Results  []byte
+	Error    string
+	ExitCode int
 }
 
 func (h History) Bytes() []byte {
@@ -27,10 +28,20 @@ func (h History) String() string {
 	return strings.Join(h.CmdArgs, " ")
 }
 
+func (h History) Verdict() string {
+	if h.ExitCode == 0 && h.Error == "" {
+		return "PASS"
+	}
+	return "FAIL"
+}
+
 func (h History) Print() {
 	fmt.Println(h.Time.In(time.Local))
 	fmt.Println(h.String())
 	fmt.Println(string(h.Results))
+	if h.Error != "" {
+		fmt.Println(h.Error)
+	}
 }
 
 func init() {
@@ -62,18 +73,26 @@ func clearHistory() {
 	}
 }
 
+func printHistory(v []byte) error {
+	h := &History{}
+	err := json.Unmarshal(v, h)
+	if err != nil {
+		return err
+	}
+	h.Print()
+	if h.ExitCode != 0 {
+		os.Exit(h.ExitCode)
+	}
+	return err
+}
+
 func showLastHistory() {
 	DB.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("history"))
 		c := b.Cursor()
 		_, v := c.Last()
 		if v != nil {
-			h := &History{}
-			err := json.Unmarshal(v, h)
-			if err != nil {
-				return err
-			}
-			h.Print()
+			return printHistory(v)
 		}
 
 		return nil
@@ -85,14 +104,9 @@ func showHistories(args []string) {
 		b := tx.Bucket([]byte("history"))
 
 		for _, ind := range args {
-			h := &History{}
-			v := b.Get([]byte(ind))
-			err := json.Unmarshal(v, h)
-			if err != nil {
-				return err
-			}
-			h.Print()
+			printHistory(b.Get([]byte(ind)))
 		}
+
 		return nil
 	})
 
@@ -108,7 +122,7 @@ func listHistories() {
 			if err != nil {
 				return err
 			}
-			fmt.Printf("%s)\t%s\n\t%s\n", k, h.Time.In(time.Local), h.String())
+			fmt.Printf("%s)\t%s | %s\n\t%s\n", k, h.Time.In(time.Local), h.Verdict(), h.String())
 			return nil
 		})
 		return nil

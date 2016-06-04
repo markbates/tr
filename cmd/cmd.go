@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"strconv"
@@ -60,13 +59,19 @@ func New(name string, args ...string) *Cmd {
 }
 
 func Exit(err error) {
-	if exiterr, ok := err.(*exec.ExitError); ok {
-		if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-			os.Exit(status.ExitStatus())
+	os.Exit(exitStatus(err))
+}
+
+func exitStatus(err error) int {
+	if err != nil {
+		if exiterr, ok := err.(*exec.ExitError); ok {
+			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+				return status.ExitStatus()
+			}
 		}
-	} else {
-		log.Fatal(err)
+		return 1
 	}
+	return 0
 }
 
 func Run(cmd *Cmd) {
@@ -75,26 +80,34 @@ func Run(cmd *Cmd) {
 		Results: []byte{},
 		Time:    time.Now(),
 	}
+	var err error
 	DB.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("history"))
 		fmt.Println(cmd.String())
 		fmt.Println("------------------------------------\n")
+
 		var bb bytes.Buffer
 		w := io.MultiWriter(os.Stdout, &bb)
 
 		cmd.Stdout = w
 		cmd.Stderr = os.Stderr
 		cmd.Start()
-		h.Error = cmd.Wait()
+		err = cmd.Wait()
+		if err != nil {
+			h.Error = err.Error()
+		}
+
 		h.Results = bb.Bytes()
+		h.ExitCode = exitStatus(err)
 		id, _ := b.NextSequence()
 		b.Put(itob(id), h.Bytes())
+
 		return nil
 	})
-	if h.Error != nil {
-		Exit(h.Error)
+	if err != nil {
+		Exit(err)
 	}
-	os.Exit(0)
+	os.Exit(h.ExitCode)
 }
 
 var Exists = func(path string) bool {
