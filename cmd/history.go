@@ -1,11 +1,10 @@
 package cmd
 
 import (
-	"encoding/json"
+	"fmt"
 	"os"
-	"sort"
+	"strings"
 
-	"github.com/boltdb/bolt"
 	"github.com/markbates/tt/cmd/models"
 	"github.com/spf13/cobra"
 )
@@ -33,69 +32,49 @@ var historyCmd = &cobra.Command{
 }
 
 func clearHistory() {
-	err := os.Remove(location())
+	err := models.ClearDB()
 	if err != nil {
 		Exit(err)
 	}
-}
-
-func printHistory(v []byte) error {
-	h := &models.History{}
-	err := json.Unmarshal(v, h)
-	if err != nil {
-		return err
-	}
-	h.Print()
-	if h.ExitCode != 0 {
-		os.Exit(h.ExitCode)
-	}
-	return err
+	fmt.Println("History has been cleared.")
 }
 
 func showLastHistory() {
-	DB.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("history"))
-		c := b.Cursor()
-		_, v := c.Last()
-		if v != nil {
-			return printHistory(v)
-		}
-
-		return nil
-	})
+	h, err := models.LastHistory()
+	if err != nil {
+		fmt.Println("This is no last piece of History.")
+		os.Exit(0)
+	}
+	h.Print()
 }
 
 func showHistories(args []string) {
-	DB.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("history"))
+	histories, err := models.GetHistories(args)
+	if err != nil {
+		Exit(err)
+	}
 
-		for _, ind := range args {
-			printHistory(b.Get([]byte(ind)))
-		}
+	if len(histories) == 0 {
+		fmt.Printf("There is no history for %s.\n", strings.Join(args, ", "))
+		return
+	}
 
-		return nil
-	})
-
+	for _, h := range histories {
+		h.Print()
+	}
 }
 
 func listHistories() {
-	histories := models.Histories{}
-	DB.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("history"))
+	histories, err := models.AllHistories()
+	if err != nil {
+		Exit(err)
+	}
 
-		b.ForEach(func(k, v []byte) error {
-			h := models.History{}
-			err := json.Unmarshal(v, &h)
-			if err != nil {
-				return err
-			}
-			histories = append(histories, h)
-			return nil
-		})
-		return nil
-	})
+	if len(histories) == 0 {
+		fmt.Println("There is no history.")
+		return
+	}
 
-	sort.Sort(histories)
 	for _, h := range histories {
 		h.PrintShort()
 	}

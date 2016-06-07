@@ -17,7 +17,7 @@ var RootCmd = &cobra.Command{
 	Use:                "tr",
 	DisableFlagParsing: true,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Test Runner: v%s\n", Version)
+		fmt.Printf("Test Runner: v%s\n\n", Version)
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		for path, runner := range runners {
