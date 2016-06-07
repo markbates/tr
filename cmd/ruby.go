@@ -42,8 +42,7 @@ func RubyBuilder(args []string) *Cmd {
 	}
 
 	for _, f := range files {
-		_, err := os.Stat(f)
-		if err == nil {
+		if Exists(f) {
 			cmd.Args = append(cmd.Args, f)
 			return cmd
 		}

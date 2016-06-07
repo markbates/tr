@@ -14,6 +14,11 @@ import (
 	"github.com/mattn/go-zglob"
 )
 
+var Exists = func(path string) bool {
+	m, err := zglob.Glob(path)
+	return err == nil && len(m) > 0
+}
+
 type Cmd struct {
 	*exec.Cmd
 }
@@ -28,18 +33,6 @@ func New(name string, args ...string) *Cmd {
 
 func Exit(err error) {
 	os.Exit(exitStatus(err))
-}
-
-func exitStatus(err error) int {
-	if err != nil {
-		if exiterr, ok := err.(*exec.ExitError); ok {
-			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-				return status.ExitStatus()
-			}
-		}
-		return 1
-	}
-	return 0
 }
 
 func Run(cmd *Cmd) {
@@ -71,7 +64,14 @@ func Run(cmd *Cmd) {
 	os.Exit(h.ExitCode)
 }
 
-var Exists = func(path string) bool {
-	m, err := zglob.Glob(path)
-	return err == nil && len(m) > 0
+func exitStatus(err error) int {
+	if err != nil {
+		if exiterr, ok := err.(*exec.ExitError); ok {
+			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+				return status.ExitStatus()
+			}
+		}
+		return 1
+	}
+	return 0
 }
