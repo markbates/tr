@@ -86,6 +86,16 @@ $ tt <any flags/args your ./test.sh file takes>
 $ tt npm <any flags/args your ./test.sh file takes>
 ```
 
+### Ruby (individual files)
+
+T.T. knows that sometimes when you're running a Rails/Ruby application that you sometimes just want to run a very specific test file. That's super easy for T.T.!
+
+```
+$ tt ruby <path/to/file.rb>
+```
+
+T.T. is such a clever bear that he even knows when you're not on a test file, and will try and find the test file for you. For example, if you try to run `app/models/user.rb` T.T. will look for either `test/models/user_test.rb` or `spec/models/user_spec.rb` and try to run that for you. I told you, he's a very, very clever bear. :)
+
 ### Custom (`./test.sh`)
 
 __Key file:__ *./test.sh*
@@ -114,11 +124,14 @@ $ tt history
 $ tt history <n>
 ```
 
+This command will not actually run the commands again, but will rather show you the output from when the command was originally run. This is really useful for recalling what tests failed.
+
 ### Replay Last Run
 
 ```
 $ tt history last
 ```
+This command will not actually run the last command again, but will rather show you the output from when the command was originally run. This is really useful for recalling what tests failed.
 
 ### Clear History
 
