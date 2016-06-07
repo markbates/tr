@@ -9,6 +9,7 @@ func init() {
 		"./test.sh":    RunTestSH,
 		"Makefile":     RunMakefile,
 		"Rakefile":     RunRakefile,
+		"package.json": RunTestNPM,
 		"**/*_test.go": RunGoTests,
 	}
 }

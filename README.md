@@ -74,6 +74,18 @@ $ tt make
 
 If you do want to use a `Makefile`, than T.T. asked me to let you know that you have a `test` target in the `Makefile`, otherwise, he'll just be down right confused and won't know what to do!
 
+### NPM
+
+__Key file:__ *package.json*
+
+T.T. knows that you young kids like to use NPM for everything. He doesn't quite understand why, but he has your back. If there is a `package.json` file in your app then `T.T.` will respond by running `npm test` for you.
+
+```
+$ tt <any flags/args your ./test.sh file takes>
+//
+$ tt npm <any flags/args your ./test.sh file takes>
+```
+
 ### Custom (`./test.sh`)
 
 __Key file:__ *./test.sh*
