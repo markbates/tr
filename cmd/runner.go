@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -32,7 +33,6 @@ func Exit(err error) {
 func Run(cmd *Cmd) {
 	h := &models.History{
 		CmdArgs: cmd.Args,
-		Results: []byte{},
 	}
 	fmt.Println(cmd.String())
 
@@ -47,7 +47,7 @@ func Run(cmd *Cmd) {
 		h.Error = err.Error()
 	}
 
-	h.Results = bb.Bytes()
+	h.Results = bb.String()
 	h.ExitCode = exitStatus(err)
 	err = h.Save()
 
@@ -67,4 +67,13 @@ func exitStatus(err error) int {
 		return 1
 	}
 	return 0
+}
+
+func printJSON(v interface{}) {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		fmt.Println(err)
+		Exit(err)
+	}
+	os.Stdout.Write(b)
 }

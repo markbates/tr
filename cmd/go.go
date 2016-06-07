@@ -42,7 +42,7 @@ func GoBuilder(args []string) *Cmd {
 		if err != nil {
 			Exit(err)
 		}
-		pkgs := strings.Split(res, "\n")
+		pkgs := strings.Split(strings.TrimSpace(res), "\n")
 		for _, p := range pkgs {
 			if !vendorRegex.Match([]byte(p)) {
 				cmd.Args = append(cmd.Args, p)

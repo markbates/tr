@@ -20,7 +20,7 @@ func Test_History_Save(t *testing.T) {
 	r := require.New(t)
 	h := &History{
 		CmdArgs:  []string{"foo", "bar"},
-		Results:  []byte("some results"),
+		Results:  "some results",
 		Error:    "some error",
 		ExitCode: 500,
 	}
@@ -42,7 +42,7 @@ func Test_AllHistories(t *testing.T) {
 	r := require.New(t)
 	h := History{
 		CmdArgs:  []string{"foo", "bar"},
-		Results:  []byte("some results"),
+		Results:  "some results",
 		Error:    "some error",
 		ExitCode: 500,
 	}
@@ -63,7 +63,7 @@ func Test_LastHistory(t *testing.T) {
 	r := require.New(t)
 	h := History{
 		CmdArgs:  []string{"foo", "bar"},
-		Results:  []byte("some results"),
+		Results:  "some results",
 		Error:    "some error",
 		ExitCode: 500,
 	}

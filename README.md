@@ -120,6 +120,31 @@ $ tt history
 $ tt h
 ```
 
+This will output something along the lines of the following:
+
+```bash
+1)  Tue Jun 07 17:14:35 -0400 2016  | PASS
+2)  Tue Jun 07 17:15:47 -0400 2016  | PASS
+3)  Tue Jun 07 17:16:26 -0400 2016  | FAIL
+4)  Tue Jun 07 17:16:33 -0400 2016  | PASS
+```
+
+#### Verbose
+
+You can also pass the `-v` flag to get more verbose details on what was ran:
+
+```bash
+$ tt h -v
+1)  Tue Jun 07 17:14:35 -0400 2016  | PASS
+    go test github.com/markbates/tt github.com/markbates/tt/cmd github.com/markbates/tt/cmd/models
+2)  Tue Jun 07 17:15:47 -0400 2016  | PASS
+    go test github.com/markbates/tt github.com/markbates/tt/cmd github.com/markbates/tt/cmd/models
+3)  Tue Jun 07 17:16:26 -0400 2016  | FAIL
+    go test github.com/markbates/tt github.com/markbates/tt/cmd github.com/markbates/tt/cmd/models
+4)  Tue Jun 07 17:16:33 -0400 2016  | PASS
+    go test github.com/markbates/tt github.com/markbates/tt/cmd github.com/markbates/tt/cmd/models
+```
+
 ### Replay History
 
 ```
@@ -145,4 +170,42 @@ This command will not actually run the last command again, but will rather show 
 $ tt history clear
 // or
 $ tt h clear
+```
+
+### History as JSON
+
+Almost all of the History commands, with the exception of `clear` accept the `-j` flag which will output the history as JSON instead of plain text.
+
+```text
+$ tt h -j
+[
+  {
+    "id": 3,
+    "time": "2016-06-07T17:16:26.867353264-04:00",
+    "cmd": [
+      "go",
+      "test",
+      "github.com/markbates/tt",
+      "github.com/markbates/tt/cmd",
+      "github.com/markbates/tt/cmd/models"
+    ],
+    "results": "?   \tgithub.com/markbates/tt\t[no test files]\nok  \tgithub.com/markbates/tt/cmd\t0.078s\n--- FAIL: Test_History_Save (0.00s)\n\tassertions.go:225: \r                        \r\tError Trace:\thistory_test.go:39\n\t\t\r\tError:\t\tShould be false\n\t\t\r\nFAIL\nFAIL\tgithub.com/markbates/tt/cmd/models\t0.023s\n",
+    "error": "exit status 1",
+    "exit_code": 1
+  },
+  {
+    "id": 4,
+    "time": "2016-06-07T17:16:33.761527184-04:00",
+    "cmd": [
+      "go",
+      "test",
+      "github.com/markbates/tt",
+      "github.com/markbates/tt/cmd",
+      "github.com/markbates/tt/cmd/models"
+    ],
+    "results": "?   \tgithub.com/markbates/tt\t[no test files]\nok  \tgithub.com/markbates/tt/cmd\t0.075s\nok  \tgithub.com/markbates/tt/cmd/models\t0.015s\n",
+    "error": "",
+    "exit_code": 0
+  }
+]
 ```

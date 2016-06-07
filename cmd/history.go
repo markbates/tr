@@ -42,11 +42,15 @@ func clearHistory() {
 
 func showLastHistory() {
 	h, err := models.LastHistory()
-	if err != nil {
-		fmt.Println("This is no last piece of History.")
-		os.Exit(0)
+	if asJSON {
+		printJSON(h)
+	} else {
+		if err != nil {
+			fmt.Println("This is no last piece of History.")
+			os.Exit(0)
+		}
+		h.Print()
 	}
-	h.Print()
 }
 
 func showHistories(args []string) {
@@ -55,13 +59,17 @@ func showHistories(args []string) {
 		Exit(err)
 	}
 
-	if len(histories) == 0 {
-		fmt.Printf("There is no history for %s.\n", strings.Join(args, ", "))
-		return
-	}
+	if asJSON {
+		printJSON(histories)
+	} else {
+		if len(histories) == 0 {
+			fmt.Printf("There is no history for %s.\n", strings.Join(args, ", "))
+			return
+		}
 
-	for _, h := range histories {
-		h.Print()
+		for _, h := range histories {
+			h.Print()
+		}
 	}
 }
 
@@ -71,12 +79,20 @@ func listHistories() {
 		Exit(err)
 	}
 
-	if len(histories) == 0 {
-		fmt.Println("There is no history.")
-		return
-	}
+	if asJSON {
+		printJSON(histories)
+	} else {
+		if len(histories) == 0 {
+			fmt.Println("There is no history.")
+			return
+		}
 
-	for _, h := range histories {
-		h.PrintShort()
+		for _, h := range histories {
+			if Verbose {
+				h.PrintShortVerbose()
+			} else {
+				h.PrintShort()
+			}
+		}
 	}
 }

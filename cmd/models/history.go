@@ -12,12 +12,12 @@ import (
 )
 
 type History struct {
-	ID       uint64
-	Time     time.Time
-	CmdArgs  []string
-	Results  []byte
-	Error    string
-	ExitCode int
+	ID       uint64    `json:"id"`
+	Time     time.Time `json:"time"`
+	CmdArgs  []string  `json:"cmd"`
+	Results  string    `json:"results"`
+	Error    string    `json:"error"`
+	ExitCode int       `json:"exit_code"`
 }
 
 func (h History) Bytes() []byte {
@@ -29,6 +29,10 @@ func (h History) String() string {
 	return strings.Join(h.CmdArgs, " ")
 }
 
+func (h History) TimeString() string {
+	return h.Time.In(time.Local).Format(time.RubyDate)
+}
+
 func (h History) Verdict() string {
 	if h.ExitCode == 0 && h.Error == "" {
 		return "PASS"
@@ -37,7 +41,7 @@ func (h History) Verdict() string {
 }
 
 func (h History) Print() {
-	fmt.Println(h.Time.In(time.Local))
+	fmt.Println(h.TimeString())
 	fmt.Println(h.String())
 	fmt.Println(string(h.Results))
 	if h.Error != "" {
@@ -46,7 +50,11 @@ func (h History) Print() {
 }
 
 func (h History) PrintShort() {
-	fmt.Printf("%d)\t%s\t| %s\n\t%s\n", h.ID, h.Time.In(time.Local), h.Verdict(), h.String())
+	fmt.Printf("%d)\t%s\t| %s\n", h.ID, h.TimeString(), h.Verdict())
+}
+
+func (h History) PrintShortVerbose() {
+	fmt.Printf("%d)\t%s\t| %s\n\t%s\n", h.ID, h.TimeString(), h.Verdict(), h.String())
 }
 
 func (h *History) Save() error {

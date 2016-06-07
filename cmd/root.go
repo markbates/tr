@@ -8,16 +8,20 @@ import (
 )
 
 var Verbose bool
+var asJSON bool
 
 func init() {
 	RootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+	RootCmd.PersistentFlags().BoolVarP(&asJSON, "json", "j", false, "")
 }
 
 var RootCmd = &cobra.Command{
-	Use:                "tr",
+	Use:                "tt",
 	DisableFlagParsing: true,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Test Runner: v%s\n\n", Version)
+		if !asJSON {
+			fmt.Printf("Test Runner: v%s\n\n", Version)
+		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, r := range builders {
