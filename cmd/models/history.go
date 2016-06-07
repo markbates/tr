@@ -8,6 +8,7 @@ import (
 )
 
 type History struct {
+	ID       uint64
 	Time     time.Time
 	CmdArgs  []string
 	Results  []byte
@@ -38,6 +39,10 @@ func (h History) Print() {
 	if h.Error != "" {
 		fmt.Println(h.Error)
 	}
+}
+
+func (h History) PrintShort() {
+	fmt.Printf("%d)\t%s\t| %s\n\t%s\n", h.ID, h.Time.In(time.Local), h.Verdict(), h.String())
 }
 
 type Histories []History

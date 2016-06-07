@@ -2,10 +2,8 @@ package cmd
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"sort"
-	"time"
 
 	"github.com/boltdb/bolt"
 	"github.com/markbates/tt/cmd/models"
@@ -98,7 +96,7 @@ func listHistories() {
 	})
 
 	sort.Sort(histories)
-	for k, h := range histories {
-		fmt.Printf("%d)\t%s\t| %s\n\t%s\n", k+1, h.Time.In(time.Local), h.Verdict(), h.String())
+	for _, h := range histories {
+		h.PrintShort()
 	}
 }

@@ -101,6 +101,7 @@ func Run(cmd *Cmd) {
 		h.Results = bb.Bytes()
 		h.ExitCode = exitStatus(err)
 		id, _ := b.NextSequence()
+		h.ID = id
 		b.Put(itob(id), h.Bytes())
 
 		return nil
