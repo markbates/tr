@@ -8,11 +8,18 @@ import (
 	"os/exec"
 	"strings"
 	"syscall"
-	"time"
 
 	"github.com/markbates/tt/cmd/models"
 	"github.com/mattn/go-zglob"
 )
+
+func init() {
+	err := models.Connect()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
 
 var Exists = func(path string) bool {
 	m, err := zglob.Glob(path)
@@ -39,7 +46,6 @@ func Run(cmd *Cmd) {
 	h := &models.History{
 		CmdArgs: cmd.Args,
 		Results: []byte{},
-		Time:    time.Now(),
 	}
 	fmt.Println(cmd.String())
 

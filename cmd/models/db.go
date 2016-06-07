@@ -17,18 +17,16 @@ var PWD string
 
 const BucketName = "history"
 
-func init() {
+func Connect() error {
 	var err error
 	PWD, err = os.Getwd()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
 
 	DB, err = bolt.Open(dbLocation(), 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
 
 	err = DB.Update(func(tx *bolt.Tx) error {
@@ -36,10 +34,7 @@ func init() {
 		return err
 	})
 
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	return err
 }
 
 func ClearDB() error {
@@ -52,7 +47,7 @@ func hash(text string) string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func dbLocation() string {
+var dbLocation = func() string {
 	dir, _ := homedir.Dir()
 	dir, _ = homedir.Expand(dir)
 	dir = fmt.Sprintf("%s/.tt", dir)
