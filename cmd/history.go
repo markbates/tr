@@ -14,7 +14,8 @@ func init() {
 }
 
 var historyCmd = &cobra.Command{
-	Use: "history",
+	Use:     "history",
+	Aliases: []string{"h"},
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			listHistories()

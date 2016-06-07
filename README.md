@@ -68,7 +68,7 @@ Are you a masochist? Do you love your old `make` files? Well, you want to know a
 
 ```
 $ tt <any flags/args your Makefile takes>
-//
+// or
 $ tt make
 ```
 
@@ -82,7 +82,7 @@ T.T. knows that you young kids like to use NPM for everything. He doesn't quite 
 
 ```
 $ tt <any flags/args your ./test.sh file takes>
-//
+// or
 $ tt npm <any flags/args your ./test.sh file takes>
 ```
 
@@ -104,7 +104,7 @@ It is hard for poor old T.T. to keep up with all of the latest and greatest new 
 
 ```
 $ tt <any flags/args your ./test.sh file takes>
-//
+// or
 $ tt sh <any flags/args your ./test.sh file takes>
 ```
 
@@ -116,12 +116,16 @@ T.T. has an incredible memory! He can remember all of the different test runs yo
 
 ```
 $ tt history
+// or
+$ tt h
 ```
 
 ### Replay History
 
 ```
 $ tt history <n>
+// or
+$ tt h <n>
 ```
 
 This command will not actually run the commands again, but will rather show you the output from when the command was originally run. This is really useful for recalling what tests failed.
@@ -130,6 +134,8 @@ This command will not actually run the commands again, but will rather show you 
 
 ```
 $ tt history last
+// or
+$ tt h last
 ```
 This command will not actually run the last command again, but will rather show you the output from when the command was originally run. This is really useful for recalling what tests failed.
 
@@ -137,4 +143,6 @@ This command will not actually run the last command again, but will rather show 
 
 ```
 $ tt history clear
+// or
+$ tt h clear
 ```

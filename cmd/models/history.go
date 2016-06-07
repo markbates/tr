@@ -99,7 +99,6 @@ func AllHistories() (Histories, error) {
 }
 
 func GetHistories(args []string) (Histories, error) {
-	fmt.Printf("### args -> %#v\n", args)
 	histories := Histories{}
 	err := DB.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(BucketName))
