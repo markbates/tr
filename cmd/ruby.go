@@ -13,12 +13,13 @@ import (
 var rubyCmd = &cobra.Command{
 	Use: "ruby",
 	Run: func(cmd *cobra.Command, args []string) {
-		Run(RunTestRuby(args))
+		Run(RubyBuilder(args))
 	},
 }
 
-func RunTestRuby(args []string) *Cmd {
-	cmd := New("ruby", "-Itest", "-Ispec")
+func RubyBuilder(args []string) *Cmd {
+	cmd := BundlerBuilder("ruby")
+	cmd.Args = append(cmd.Args, "-Itest", "-Ispec")
 
 	if len(args) == 0 {
 		fmt.Println("You must supply a file name.")

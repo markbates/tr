@@ -9,11 +9,11 @@ func init() {
 var makeCmd = &cobra.Command{
 	Use: "make",
 	Run: func(cmd *cobra.Command, args []string) {
-		Run(RunMakefile(args))
+		Run(MakefileBuilder(args))
 	},
 }
 
-func RunMakefile(args []string) *Cmd {
+func MakefileBuilder(args []string) *Cmd {
 	cmd := New("make", "test")
 	cmd.Args = append(cmd.Args, args...)
 	return cmd

@@ -23,11 +23,11 @@ var goCmd = &cobra.Command{
 	Use:                "go",
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
-		Run(RunGoTests(args))
+		Run(GoBuilder(args))
 	},
 }
 
-func RunGoTests(args []string) *Cmd {
+func GoBuilder(args []string) *Cmd {
 	os.Setenv("GO_ENV", "test")
 	cmd := New("go", "test")
 	cmd.Args = append(cmd.Args, args...)

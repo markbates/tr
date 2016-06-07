@@ -20,9 +20,9 @@ var RootCmd = &cobra.Command{
 		fmt.Printf("Test Runner: v%s\n\n", Version)
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		for _, r := range runners {
+		for _, r := range builders {
 			if Exists(r.keyFile) {
-				Run(r.runFunc(args))
+				Run(r.builderFunc(args))
 			}
 		}
 	},
