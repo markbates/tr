@@ -43,7 +43,7 @@ func Test_RunGoTests(t *testing.T) {
 	r := require.New(t)
 	os.Setenv("GO_ENV", "")
 	cmd := RunGoTests([]string{"-v", "-race"})
-	r.Equal("go test -v -race github.com/markbates/tt/cmd", cmd.String())
+	r.Equal("go test -v -race github.com/markbates/tt/cmd github.com/markbates/tt/cmd/models", cmd.String())
 	r.Equal("test", os.Getenv("GO_ENV"))
 }
 

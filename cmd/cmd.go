@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/boltdb/bolt"
+	"github.com/markbates/tt/cmd/models"
 	"github.com/mattn/go-zglob"
 	"github.com/mitchellh/go-homedir"
 )
@@ -75,7 +76,7 @@ func exitStatus(err error) int {
 }
 
 func Run(cmd *Cmd) {
-	h := &History{
+	h := &models.History{
 		CmdArgs: cmd.Args,
 		Results: []byte{},
 		Time:    time.Now(),

@@ -4,45 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
+	"sort"
 	"time"
 
 	"github.com/boltdb/bolt"
+	"github.com/markbates/tt/cmd/models"
 	"github.com/spf13/cobra"
 )
-
-type History struct {
-	Time     time.Time
-	CmdArgs  []string
-	Results  []byte
-	Error    string
-	ExitCode int
-}
-
-func (h History) Bytes() []byte {
-	b, _ := json.Marshal(h)
-	return b
-}
-
-func (h History) String() string {
-	return strings.Join(h.CmdArgs, " ")
-}
-
-func (h History) Verdict() string {
-	if h.ExitCode == 0 && h.Error == "" {
-		return "PASS"
-	}
-	return "FAIL"
-}
-
-func (h History) Print() {
-	fmt.Println(h.Time.In(time.Local))
-	fmt.Println(h.String())
-	fmt.Println(string(h.Results))
-	if h.Error != "" {
-		fmt.Println(h.Error)
-	}
-}
 
 func init() {
 	RootCmd.AddCommand(historyCmd)
@@ -74,7 +42,7 @@ func clearHistory() {
 }
 
 func printHistory(v []byte) error {
-	h := &History{}
+	h := &models.History{}
 	err := json.Unmarshal(v, h)
 	if err != nil {
 		return err
@@ -113,18 +81,24 @@ func showHistories(args []string) {
 }
 
 func listHistories() {
+	histories := models.Histories{}
 	DB.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("history"))
 
 		b.ForEach(func(k, v []byte) error {
-			h := &History{}
-			err := json.Unmarshal(v, h)
+			h := models.History{}
+			err := json.Unmarshal(v, &h)
 			if err != nil {
 				return err
 			}
-			fmt.Printf("%s)\t%s\t| %s\n\t%s\n", k, h.Time.In(time.Local), h.Verdict(), h.String())
+			histories = append(histories, h)
 			return nil
 		})
 		return nil
 	})
+
+	sort.Sort(histories)
+	for k, h := range histories {
+		fmt.Printf("%d)\t%s\t| %s\n\t%s\n", k+1, h.Time.In(time.Local), h.Verdict(), h.String())
+	}
 }
