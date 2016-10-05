@@ -18,35 +18,55 @@ var rubyCmd = &cobra.Command{
 }
 
 func RubyBuilder(args []string) *Cmd {
-	cmd := BundlerBuilder("ruby")
-	cmd.Args = append(cmd.Args, "-Itest", "-Ispec")
-
 	if len(args) == 0 {
 		fmt.Println("You must supply a file name.")
 		os.Exit(1)
 	}
+
+	var tf string
+
 	f := args[0]
 	rx := regexp.MustCompile("^(test|spec)")
-	if rx.Match([]byte(f)) {
-		cmd.Args = append(cmd.Args, f)
-		return cmd
-	}
-	f_test := strings.Replace(f, ".rb", "_test.rb", 1)
-	f_spec := strings.Replace(f, ".rb", "_spec.rb", 1)
-
-	files := []string{
-		f_test,
-		f_spec,
-		"test/" + strings.Replace(f_test, "app/", "", 1),
-		"spec/" + strings.Replace(f_spec, "app/", "", 1),
+	if rx.MatchString(f) {
+		tf = f
+		// cmd.Args = append(cmd.Args, f)
+		// return cmd
 	}
 
-	for _, f := range files {
-		if Exists(f) {
-			cmd.Args = append(cmd.Args, f)
-			return cmd
+	if tf == "" {
+		f_test := strings.Replace(f, ".rb", "_test.rb", 1)
+		f_spec := strings.Replace(f, ".rb", "_spec.rb", 1)
+
+		files := []string{
+			f_test,
+			f_spec,
+			"test/" + strings.Replace(f_test, "app/", "", 1),
+			"spec/" + strings.Replace(f_spec, "app/", "", 1),
+		}
+
+		for _, f := range files {
+			if Exists(f) {
+				tf = f
+				break
+				// cmd.Args = append(cmd.Args, f)
+				// return cmd
+			}
+		}
+		if tf == "" {
+			fmt.Printf("Could not find a corresponding test for %s\n", f)
+			os.Exit(1)
 		}
 	}
+
+	rx = regexp.MustCompile("spec.rb")
+	if rx.MatchString(tf) {
+		cmd := BundlerBuilder("rspec")
+		cmd.Args = append(cmd.Args, tf)
+		return cmd
+	}
+
+	cmd := BundlerBuilder("ruby")
+	cmd.Args = append(cmd.Args, "-Itest", "-Ispec")
 	return cmd
 }
 
