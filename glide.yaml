@@ -1,9 +1,0 @@
-package: github.com/markbates/tt
-import:
-- package: github.com/boltdb/bolt
-- package: github.com/markbates/going
-  subpackages:
-  - clam
-- package: github.com/mattn/go-zglob
-- package: github.com/mitchellh/go-homedir
-- package: github.com/spf13/cobra

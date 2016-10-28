@@ -10,7 +10,7 @@ import (
 	"syscall"
 
 	"github.com/markbates/tt/cmd/models"
-	"github.com/mattn/go-zglob"
+	zglob "github.com/mattn/go-zglob"
 )
 
 func init() {

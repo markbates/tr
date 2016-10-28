@@ -66,7 +66,7 @@ func RubyBuilder(args []string) *Cmd {
 	}
 
 	cmd := BundlerBuilder("ruby")
-	cmd.Args = append(cmd.Args, "-Itest", "-Ispec")
+	cmd.Args = append(cmd.Args, "-Itest", tf)
 	return cmd
 }
 
