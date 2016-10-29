@@ -39,6 +39,7 @@ func Run(cmd *Cmd) {
 	var bb bytes.Buffer
 	w := io.MultiWriter(os.Stdout, &bb)
 
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = w
 	cmd.Stderr = os.Stderr
 	cmd.Start()
