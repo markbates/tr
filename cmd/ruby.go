@@ -26,7 +26,7 @@ func RubyBuilder(args []string) *Cmd {
 	var tf string
 
 	f := args[0]
-	rx := regexp.MustCompile("^(test|spec)")
+	rx := regexp.MustCompile("(test|spec).rb")
 	if rx.MatchString(f) {
 		tf = f
 		// cmd.Args = append(cmd.Args, f)
