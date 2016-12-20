@@ -13,7 +13,7 @@ func init() {
 		{"./test.sh", TestSHBuilder},
 		{"Makefile", MakefileBuilder},
 		{"Rakefile", RakefileBuilder},
-		{"package.json", NPMBuilder},
 		{"**/*_test.go", GoBuilder},
+		{"package.json", NPMBuilder},
 	}
 }
