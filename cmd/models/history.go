@@ -58,7 +58,11 @@ func (h History) PrintShortVerbose() {
 }
 
 func (h *History) Save() error {
-	err := DB.Update(func(tx *bolt.Tx) error {
+	db, err := DB()
+	if err != nil {
+		return err
+	}
+	err = db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(BucketName))
 		id, err := b.NextSequence()
 		if err != nil {
@@ -88,7 +92,11 @@ func (a Histories) Less(i, j int) bool {
 
 func AllHistories() (Histories, error) {
 	histories := Histories{}
-	err := DB.View(func(tx *bolt.Tx) error {
+	db, err := DB()
+	if err != nil {
+		return histories, err
+	}
+	err = db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(BucketName))
 
 		return b.ForEach(func(k, v []byte) error {
@@ -108,7 +116,11 @@ func AllHistories() (Histories, error) {
 
 func GetHistories(args []string) (Histories, error) {
 	histories := Histories{}
-	err := DB.View(func(tx *bolt.Tx) error {
+	db, err := DB()
+	if err != nil {
+		return histories, err
+	}
+	err = db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(BucketName))
 
 		for _, ind := range args {
@@ -131,7 +143,11 @@ func GetHistories(args []string) (Histories, error) {
 
 func LastHistory() (History, error) {
 	h := History{}
-	err := DB.View(func(tx *bolt.Tx) error {
+	db, err := DB()
+	if err != nil {
+		return h, err
+	}
+	err = db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(BucketName))
 		c := b.Cursor()
 		_, v := c.Last()

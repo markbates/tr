@@ -12,24 +12,34 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
-var DB *bolt.DB
+var db *bolt.DB
 var PWD string
 
 const BucketName = "history"
 
-func Connect() error {
+func DB() (*bolt.DB, error) {
+	if db == nil {
+		err := connect()
+		if err != nil {
+			return nil, err
+		}
+	}
+	return db, nil
+}
+
+func connect() error {
 	var err error
 	PWD, err = os.Getwd()
 	if err != nil {
 		return err
 	}
 
-	DB, err = bolt.Open(dbLocation(), 0600, &bolt.Options{Timeout: 1 * time.Second})
+	db, err = bolt.Open(dbLocation(), 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		return err
 	}
 
-	err = DB.Update(func(tx *bolt.Tx) error {
+	err = db.Update(func(tx *bolt.Tx) error {
 		_, err := tx.CreateBucketIfNotExists([]byte(BucketName))
 		return err
 	})

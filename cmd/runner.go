@@ -13,14 +13,6 @@ import (
 	zglob "github.com/mattn/go-zglob"
 )
 
-func init() {
-	err := models.Connect()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-}
-
 var Exists = func(path string) bool {
 	m, err := zglob.Glob(path)
 	return err == nil && len(m) > 0
