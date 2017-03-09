@@ -10,6 +10,7 @@ var builders []builder
 
 func init() {
 	builders = []builder{
+		{".buffalo.dev.yml", BuffaloBuilder},
 		{"./test.sh", TestSHBuilder},
 		{"Makefile", MakefileBuilder},
 		{"Rakefile", RakefileBuilder},
