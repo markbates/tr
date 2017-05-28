@@ -13,6 +13,7 @@ func init() {
 		{".buffalo.dev.yml", BuffaloBuilder},
 		{"./test.sh", TestSHBuilder},
 		{"Makefile", MakefileBuilder},
+		{"bin/rails", RailsBuilder},
 		{"Rakefile", RakefileBuilder},
 		{"**/*_test.go", GoBuilder},
 		{"package.json", NPMBuilder},
