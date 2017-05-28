@@ -7,7 +7,8 @@ func init() {
 }
 
 var railsCmd = &cobra.Command{
-	Use: "rails",
+	Use:                "rails",
+	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		Run(RailsBuilder(args))
 	},
