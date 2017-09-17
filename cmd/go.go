@@ -1,12 +1,12 @@
 package cmd
 
 import (
+	"bytes"
+	"fmt"
 	"os"
 	"os/exec"
 	"regexp"
-	"strings"
 
-	"github.com/markbates/going/clam"
 	"github.com/spf13/cobra"
 )
 
@@ -38,14 +38,16 @@ func GoBuilder(args []string) *Cmd {
 		}
 	}
 	if !runFlag {
-		res, err := clam.Run(exec.Command("go", "list", "./..."))
+		c := exec.Command("go", "list", "./...")
+		res, err := c.CombinedOutput()
 		if err != nil {
+			fmt.Println(string(res))
 			Exit(err)
 		}
-		pkgs := strings.Split(strings.TrimSpace(res), "\n")
+		pkgs := bytes.Split(bytes.TrimSpace(res), []byte("\n"))
 		for _, p := range pkgs {
-			if !vendorRegex.Match([]byte(p)) {
-				cmd.Args = append(cmd.Args, p)
+			if !vendorRegex.Match(p) {
+				cmd.Args = append(cmd.Args, string(p))
 			}
 		}
 	}

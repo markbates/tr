@@ -1,10 +1,8 @@
 package cmd
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"syscall"
@@ -28,19 +26,19 @@ func Run(cmd *Cmd) {
 	}
 	fmt.Println(cmd.String())
 
-	var bb bytes.Buffer
-	w := io.MultiWriter(os.Stdout, &bb)
+	// w := io.MultiWriter(os.Stdout, &bb)
+	// w := io.MultiWriter(&bb, os.Stdout)
 
 	cmd.Stdin = os.Stdin
-	cmd.Stdout = w
+	// cmd.Stdout = w
+	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Start()
-	err := cmd.Wait()
+	err := cmd.Run()
 	if err != nil {
 		h.Error = err.Error()
 	}
 
-	h.Results = bb.String()
+	// h.Results = string(b)
 	h.ExitCode = exitStatus(err)
 	err = h.Save()
 
