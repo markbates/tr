@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"strings"
 
 	"github.com/gobuffalo/envy"
 	"github.com/spf13/cobra"
@@ -33,6 +34,9 @@ var goBin = envy.Get("GO_BIN", "go")
 func GoBuilder(args []string) *Cmd {
 	os.Setenv("GO_ENV", "test")
 	cmd := New(goBin, "test")
+	if strings.Contains(goBin, "vgo") {
+		cmd.Args = append(cmd.Args, "-vet", "off")
+	}
 	cmd.Args = append(cmd.Args, args...)
 	runFlag := false
 	for _, a := range cmd.Args {
