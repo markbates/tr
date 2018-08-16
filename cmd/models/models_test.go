@@ -17,7 +17,7 @@ func tx(fn func()) {
 		return path
 	}
 
-	err := Connect()
+	err := connect()
 	if err != nil {
 		panic(err)
 	}

@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"regexp"
 
+	"github.com/gobuffalo/envy"
 	"github.com/spf13/cobra"
 )
 
@@ -27,9 +28,11 @@ var goCmd = &cobra.Command{
 	},
 }
 
+var goBin = envy.Get("GO_BIN", "go")
+
 func GoBuilder(args []string) *Cmd {
 	os.Setenv("GO_ENV", "test")
-	cmd := New("go", "test")
+	cmd := New(goBin, "test")
 	cmd.Args = append(cmd.Args, args...)
 	runFlag := false
 	for _, a := range cmd.Args {
@@ -38,7 +41,7 @@ func GoBuilder(args []string) *Cmd {
 		}
 	}
 	if !runFlag {
-		c := exec.Command("go", "list", "./...")
+		c := exec.Command(goBin, "list", "./...")
 		res, err := c.CombinedOutput()
 		if err != nil {
 			fmt.Println(string(res))
