@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"bytes"
-	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"regexp"
@@ -46,12 +46,16 @@ func GoBuilder(args []string) *Cmd {
 	}
 	if !runFlag {
 		c := exec.Command(goBin, "list", "./...")
-		res, err := c.CombinedOutput()
-		if err != nil {
-			fmt.Println(string(res))
+		bb := &bytes.Buffer{}
+		mw := io.MultiWriter(bb, os.Stdout, os.Stderr)
+		c.Stderr = mw
+		c.Stdout = mw
+		c.Stdin = os.Stdin
+
+		if err := c.Run(); err != nil {
 			Exit(err)
 		}
-		pkgs := bytes.Split(bytes.TrimSpace(res), []byte("\n"))
+		pkgs := bytes.Split(bytes.TrimSpace(bb.Bytes()), []byte("\n"))
 		for _, p := range pkgs {
 			if !vendorRegex.Match(p) {
 				cmd.Args = append(cmd.Args, string(p))
