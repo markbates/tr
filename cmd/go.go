@@ -2,19 +2,13 @@ package cmd
 
 import (
 	"os"
-	"regexp"
 
 	"github.com/gobuffalo/envy"
 	"github.com/spf13/cobra"
 )
 
-const vendorPattern = "/vendor/"
-
-var vendorRegex *regexp.Regexp
-
 func init() {
 	RootCmd.AddCommand(goCmd)
-	vendorRegex = regexp.MustCompile(vendorPattern)
 }
 
 var goCmd = &cobra.Command{
@@ -29,7 +23,7 @@ var goBin = envy.Get("GO_BIN", "go")
 
 func GoBuilder(args []string) *Cmd {
 	os.Setenv("GO_ENV", "test")
-	cmd := New(goBin, "test", "-cover")
+	cmd := New(goBin, "test", "-cover", "-short")
 	if len(args) == 0 {
 		args = append(args, "./...")
 	}
