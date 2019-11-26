@@ -14,8 +14,5 @@ func init() {
 		{"./test.sh", TestSHBuilder},
 		{".buffalo.dev.yml", BuffaloBuilder},
 		{"**/*_test.go", GoBuilder},
-		{"bin/rails", RailsBuilder},
-		{"Rakefile", RakefileBuilder},
-		{"package.json", NPMBuilder},
 	}
 }
