@@ -3,7 +3,6 @@ package cmd
 import (
 	"os"
 
-	"github.com/gobuffalo/envy"
 	"github.com/spf13/cobra"
 )
 
@@ -19,11 +18,9 @@ var goCmd = &cobra.Command{
 	},
 }
 
-var goBin = envy.Get("GO_BIN", "go")
-
 func GoBuilder(args []string) *Cmd {
 	os.Setenv("GO_ENV", "test")
-	cmd := New(goBin, "test", "-cover", "-short")
+	cmd := New("go", "test", "-cover", "-short")
 	if len(args) == 0 {
 		args = append(args, "./...")
 	}
